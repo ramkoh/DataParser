@@ -4,14 +4,14 @@ library(igraph)
 fetch_highest_command_rate <- function() {
   graph <- startGraph("http://localhost:7474/db/data/")
   
-  query <- "MATCH (a)-[r:TIME]->(b)
+  query <- "MATCH (a)-[r]->(b)
   RETURN b.time as tm,
   collect(a) as queries,
   COUNT(r) as execution_rate ORDER BY execution_rate DESC LIMIT 10"
   data <- cypher(graph, query)
-  return(data)
-  #ig = graph.data.frame(data, directed=F)
-  #plot(ig)
+ # return(data)
+  ig = graph.data.frame(data, directed=F)
+  plot(ig)
 }
 
 fetch_all_times<- function() {

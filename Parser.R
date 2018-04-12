@@ -1,20 +1,21 @@
 library('data.table')
 library('stringr')
 library('stringi')
+library('reshape2')
 
 source('~/R_projects/PARSER/Reader.R', echo=FALSE)
 
 
-data_extractor_for_get_commands <- function(files) {
+extractor <- function(files) {
 
   logs_for_cmedit_commands <- reader()
   # Extract commands and related data
   cmedit_commands <-
-    stri_extract_all_regex(logs_for_cmedit_commands, '(?<=cmedit).*?(?=STARTED)')
-  
+    data.frame(stri_extract_all_regex(logs_for_cmedit_commands, '(?<=cmedit).*?(?=STARTED|])'))
+
   date_of_commands <-
     data.frame(col1 = c(
-      stri_extract_all_regex(logs_for_cmedit_commands, '\\d{4}-\\d{2}-\\d{2}')
+      stri_extract_all_regex(logs_for_cmedit_commands, '\\d{4}-\\d{2}-\\d{2}T')
     ))
   names(date_of_commands) <- "col1"
   date_of_commands[c('col1.year', 'col1.month', 'col1.date')] <-
@@ -36,5 +37,8 @@ data_extractor_for_get_commands <- function(files) {
   setnames(command_data,
            c("usecase", "year", "month", "date", "time_of_commands"))
   
-  return (command_data)
+  df <- data.frame(cmedit_commands, date_of_commands$col1, time_of_commands)
+  setnames(df,
+           c("usecase", "date_of_command", "time_of_commands"))
+  return (df)
 }
