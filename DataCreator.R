@@ -7,7 +7,7 @@ create_data <- function() {
 
   
   
-  query1 = "CREATE (usecase:Command {command:{get_command}, site:'T-Mobile_Syosset_syl3lms_LTE', date_of_command:{date_of_command}})
+  query1 = "CREATE (usecase:Command {command:{get_command}, site:'site_nmae', date_of_command:{date_of_command}})
   MERGE (t:Time {time:{time}}) 
   MERGE (t) <- [r1:EXECUTION_TIME] - (usecase)"
   
